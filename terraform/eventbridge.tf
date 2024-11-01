@@ -4,28 +4,10 @@ module "eventbridge" {
   tags = {
     Name = "eventbridge"
   }
-
   bus_name                 = var.bus_name
   attach_cloudwatch_policy = var.create_log_group
   cloudwatch_target_arns   = var.create_log_group ? [module.event_bus_logs.cloudwatch_log_group_arn] : []
-
-  rules = {
-    logs = {
-      description   = "Capture log data"
-      event_pattern = jsonencode(var.log_rule)
-    }
-  }
-
-  targets = {
-    logs = [
-      {
-        name = "send-logs-to-cloudwatch"
-        arn  = module.event_bus_logs.cloudwatch_log_group_arn
-      }
-    ]
-  }
-
-  connections = { for name in nonsensitive(keys(yamldecode(data.sops_file.platformevents.raw)["url"])) :
+  connections = { for name in nonsensitive(keys(yamldecode(data.sops_file.teams.raw)["url"])) :
     "teams_${name}" => {
       authorization_type = "API_KEY"
       auth_parameters = {
@@ -38,7 +20,7 @@ module "eventbridge" {
   }
 
   api_destinations = {
-    for name, url in nonsensitive(yamldecode(data.sops_file.platformevents.raw)["aws_operations_alerts_urls"]) :
+    for name, url in nonsensitive(yamldecode(data.sops_file.teams.raw)["url"]) :
     "teams_${name}" => {
       description                      = "${name} channel"
       invocation_endpoint              = url
@@ -51,8 +33,6 @@ module "eventbridge" {
   attach_api_destination_policy = true
   create_api_destinations       = true
   create_connections            = true
-
-
 }
 
 
@@ -73,4 +53,9 @@ data "aws_iam_policy_document" "eventbridge_put_events_policy" {
     actions   = ["events:PutEvents"]
     resources = [module.eventbridge.eventbridge_bus_arn]
   }
+}
+
+
+data "sops_file" "teams" {
+  source_file = "../teams.secrets.yaml" //not here for obvious reasons
 }
