@@ -54,8 +54,6 @@ data "aws_iam_policy_document" "eventbridge_put_events_policy" {
     resources = [module.eventbridge.eventbridge_bus_arn]
   }
 }
-
-
 data "sops_file" "teams" {
-  source_file = "../teams.secrets.yaml" //not here for obvious reasons
+  source_file = "../teams.secrets.yaml" //the file is not included for obvious reasons
 }

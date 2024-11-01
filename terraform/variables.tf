@@ -9,9 +9,3 @@ variable "create_log_group" {
   type        = bool
   default     = true
 }
-
-variable "log_rule" {
-  description = "Rule for logging selected events. Defaults to all events"
-  type        = map(any)
-  default     = { "source" : [{ "prefix" : "" }] }
-}

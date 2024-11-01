@@ -27,7 +27,7 @@ module "dynamo_eventbridge_rules" {
     found_post_operation = [
       {
         name            = "dynamoDbPostNotifications"
-        arn             = module.eventbridge.eventbridge_api_destination_arns["teams_testing"]
+        arn             = module.eventbridge.eventbxridge_api_destination_arns["teams_testing"]
         attach_role_arn = module.eventbridge.eventbridge_role_arn
         input_transformer = {
           input_paths = {
