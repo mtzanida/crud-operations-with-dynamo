@@ -81,7 +81,7 @@ def postMethod(requestBody):
     response = client.put_events(
         Entries=[
             {
-                "Source": "mdlz.dynamo",
+                "Source": "dynamo",
                 "DetailType": "dynamo_POST",
                 "Detail": json.dumps(body),
                 "EventBusName": "marias-bus",
