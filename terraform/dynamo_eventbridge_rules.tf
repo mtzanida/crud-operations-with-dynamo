@@ -14,7 +14,7 @@ module "dynamo_eventbridge_rules" {
     found_post_operation = {
       description = "Detected POST operation on dynamo db"
       event_pattern = jsonencode({
-        "source" = ["mdlz.dynamo"]
+        "source" = ["dynamo"]
         "detail" = {
           "operation" = ["POST"],
           "message"   = ["success"]
